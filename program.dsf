@@ -6,7 +6,6 @@ move 0 %RPG1
 move 1 %RPG2
 move 5 %RPG3
 laco:
-move &a %RPG1
 move %RPG0 a
 move %RPG1 %RPG0
 add a %RPG0

@@ -551,6 +551,53 @@ public class Architecture {
    * 31. ula(1) -> intbus
    * 32. pc <- intbus // pc++ (pointing to the next command) :D
    */
+
+   public void addImmReg() {
+    // Increment PC to point to the immediate value
+    PC.internalRead();
+    ula.internalStore(1);
+    ula.inc();
+    ula.internalRead(1);
+    ula.read(1);
+    PC.internalStore();
+  
+    // Read the immediate value from the memory
+    memory.read();
+    ula.store(0);
+  
+    // Increment PC to point to the register id
+    PC.internalRead();
+    ula.internalStore(1);
+    ula.inc();
+    ula.internalRead(1);
+    ula.read(1);
+    PC.internalStore();
+  
+    // Read the register id from the memory
+    memory.read();
+    demux.setValue(extbus.get());
+  
+    // Select the register and read its value
+    registersRead();
+    ula.store(1);
+  
+    // Add the immediate value to the register value
+    ula.add();
+  
+    // Write the result back to the register
+    ula.read(1);
+    demux.setValue(extbus.get());
+    registersStore();
+    setStatusFlags(extbus.get());
+  
+    // Increment PC to point to the next command
+    PC.internalRead();
+    ula.internalStore(1);
+    ula.inc();
+    ula.internalRead(1);
+    PC.internalStore();
+  }
+
   public void subRegReg() {
     // Increment PC to point to the first register
     PC.internalRead();
@@ -773,6 +820,53 @@ public class Architecture {
     ula.inc();
     ula.internalRead(1);
     ula.read(1);
+    PC.internalStore();
+  }
+
+
+  public void subImmReg() {
+    // Increment PC to point to the immediate value
+    PC.internalRead();
+    ula.internalStore(1);
+    ula.inc();
+    ula.internalRead(1);
+    ula.read(1);
+    PC.internalStore();
+  
+    // Read the immediate value from the memory
+    memory.read();
+    ula.store(0);
+  
+    // Increment PC to point to the register id
+    PC.internalRead();
+    ula.internalStore(1);
+    ula.inc();
+    ula.internalRead(1);
+    ula.read(1);
+    PC.internalStore();
+  
+    // Read the register id from the memory
+    memory.read();
+    demux.setValue(extbus.get());
+  
+    // Select the register and read its value
+    registersRead();
+    ula.store(1);
+  
+    // Subtract the immediate value from the register value
+    ula.sub();
+  
+    // Write the result back to the register
+    ula.read(1);
+    demux.setValue(extbus.get());
+    registersStore();
+    setStatusFlags(extbus.get());
+  
+    // Increment PC to point to the next command
+    PC.internalRead();
+    ula.internalStore(1);
+    ula.inc();
+    ula.internalRead(1);
     PC.internalStore();
   }
 
@@ -1203,70 +1297,6 @@ public class Architecture {
 
   /**
    * This method implements the microprogram for
-   * inc <mem>
-   * In the machine language this command number is 14
-   * <p>
-   * The method reads the memory position from the memory, in positions just after the command, and
-   * increments the value from the memory position
-   * <p>
-   * 1. pc -> intbus
-   * 2. ula(1) <- intbus
-   * 3. ula.inc
-   * 4. ula(1) -> intbus
-   * 5. ula(1) -> extbus
-   * 6. pc <- intbus // pc++ (pointing to the memory position)
-   * 7. memory -> extbus // sets the extbus value to the memory position
-   * 8. memory <- extbus // sends the memory position and waits for the value
-   * 9. memory -> extbus // sets the extbus value to the memory position
-   * 10. ula(1) <- extbus // moves the value from the memory to the ula
-   * 11. ula.inc // increment the value in the ula
-   * 12. ula(1) -> extbus // moves the value from the ula to the extbus
-   * 13. memory <- extbus // sends the value to the memory and stores it in the memory position
-   * 14. pc -> intbus
-   * 15. ula(1) <- intbus
-   * 16. ula.inc
-   * 17. ula(1) -> intbus
-   * 18. pc <- intbus // pc++ (pointing to the next command) :D
-   */
-  public void incMem() {
-    // Increment PC to point to the memory position
-    PC.internalRead();
-    ula.internalStore(1);
-    ula.inc();
-    ula.internalRead(1);
-    ula.read(1);
-    PC.internalStore();
-
-    // Read the memory position from the memory
-    memory.read();
-    memory.store();
-
-    // Read the value from the memory position
-    memory.read();
-
-    // Move the value from the memory to the ula
-    ula.store(1);
-
-    // Increment the value in the ula
-    ula.inc();
-
-    // Move the value from the ula to the extbus
-    ula.read(1);
-    setStatusFlags(extbus.get()); // Set the flags according the result
-
-    // Write the value from the ula to the memory
-    memory.store();
-
-    // Increment PC to point to the next command
-    PC.internalRead();
-    ula.internalStore(1);
-    ula.inc();
-    ula.internalRead(1);
-    PC.internalStore();
-  }
-
-  /**
-   * This method implements the microprogram for
    * jmp <mem>
    * In the machine language this command number is 15
    * <p>
@@ -1646,6 +1676,100 @@ public class Architecture {
   }
 
   /**
+ * This method implements the microprogram for
+ * jneq <reg1> <reg2> <mem>
+ * In the machine language this command number is 20
+ * <p>
+ * The method reads the two register ids (<reg1> and <reg2>) and the memory position from the memory, in positions just after the command, and
+ * jumps to the memory position if the two registers are not equal
+ */
+/**
+ * This method implements the microprogram for
+ * jneq <reg1> <reg2> <mem>
+ * In the machine language this command number is 22
+ * <p>
+ * The method reads the two register ids (<reg1> and <reg2>) and the memory position from the memory, in positions just after the command, and
+ * jumps to the memory position if the two registers are not equal
+ */
+public void jneq() {
+  // Increment PC to point to the first register
+  PC.internalRead();
+  ula.internalStore(1);
+  ula.inc();
+  ula.internalRead(1);
+  ula.read(1);
+  PC.internalStore();
+
+  // Read the first register id from the memory
+  memory.read();
+
+  // Select the first register and read it
+  demux.setValue(extbus.get());
+  registersRead();
+
+  // Store the value of the first register in ULA
+  ula.store(0);
+
+  // Increment PC to point to the second register
+  PC.internalRead();
+  ula.internalStore(1);
+  ula.inc();
+  ula.internalRead(1);
+  ula.read(1);
+  PC.internalStore();
+
+  // Read the second register id from the memory
+  memory.read();
+
+  // Select the second register and read it
+  demux.setValue(extbus.get());
+  registersRead();
+
+  // Store the value of the second register in ULA
+  ula.store(1);
+
+  // Subtract the value of the first register from the value of the second register
+  ula.sub();
+  ula.read(1);
+  setStatusFlags(extbus.get()); // Set the flags according to the result
+
+  // Increment PC to point to the memory position
+  PC.internalRead();
+  ula.internalStore(1);
+  ula.inc();
+  ula.internalRead(1);
+  ula.read(1);
+  PC.internalStore();
+
+  // Read the memory position from the memory
+  memory.read();
+
+  // Store the memory position to jump to in statusMemory
+  statusMemory.storeIn1();
+
+  // Increment PC to point to the next instruction
+  PC.internalRead();
+  ula.internalStore(1);
+  ula.inc();
+  ula.internalRead(1);
+  ula.read(1);
+  PC.internalStore();
+
+  // Store the memory position to jump to in statusMemory
+  statusMemory.storeIn0();
+
+  // Check if the result of the subtraction is not zero (i.e., the registers are not equal)
+  extbus.put(flags.getBit(0));
+  statusMemory.read();
+
+  ula.store(0);
+  ula.internalRead(0);
+  PC.internalStore();
+}
+
+
+
+  /**
    * This method performs an (external) read from a register into the register list.
    * The register id must be in the demux bus
    */
@@ -1732,7 +1856,7 @@ public class Architecture {
         addRegMem();
         break;
       case 3:
-        
+        addImmReg();
         break;
       case 4:
         subRegReg();
@@ -1744,7 +1868,7 @@ public class Architecture {
         subRegMem();
         break;
       case 7:
-        
+        subImmReg();
         break;
       case 8:
         imulMemReg();
@@ -1768,7 +1892,7 @@ public class Architecture {
         moveImmReg();
         break;
       case 15:
-        
+        incReg();
         break;
       case 16:
         jmp();
@@ -1783,7 +1907,7 @@ public class Architecture {
         jeq();
         break;
       case 20:
-        
+        jneq();
         break;
       case 21:
         jgt();

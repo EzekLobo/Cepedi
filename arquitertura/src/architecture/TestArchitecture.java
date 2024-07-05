@@ -625,7 +625,7 @@ public class TestArchitecture {
     arch.getMemory().getDataList()[100] = 2000;
 
     // INC 100
-    arch.incMem();
+    
 
     // Testing if memory position 100 stores the value 2001
     assertEquals(2001, arch.getMemory().getDataList()[100]);
