@@ -1732,66 +1732,69 @@ public class Architecture {
         addRegMem();
         break;
       case 3:
-        subRegReg();
+        
         break;
       case 4:
-        subMemReg();
+        subRegReg();
         break;
       case 5:
-        subRegMem();
+        subMemReg();
         break;
       case 6:
-        imulMemReg();
+        subRegMem();
         break;
       case 7:
-        imulRegMem();
+        
         break;
       case 8:
-        imulRegReg();
+        imulMemReg();
         break;
       case 9:
-        moveMemReg();
+        imulRegMem();
         break;
       case 10:
-        moveRegMem();
+        imulRegReg();
         break;
       case 11:
-        moveRegReg();
+        moveMemReg();
         break;
       case 12:
-        moveImmReg();
+        moveRegMem();
         break;
       case 13:
-        incReg();
+        moveRegReg();
         break;
       case 14:
-        incMem();
+        moveImmReg();
         break;
       case 15:
-        jmp();
+        
         break;
       case 16:
-        jn();
+        jmp();
         break;
       case 17:
-        jz();
+        jn();
         break;
       case 18:
-        jnz();
+        jz();
         break;
       case 19:
         jeq();
         break;
       case 20:
-        jgt();
+        
         break;
       case 21:
+        jgt();
+        break;
+      case 22:
         jlw();
         break;
       default:
         halt = true;
         break;
-    }
+      }
 
     if (simulation) {
       simulationDecodeExecuteAfter();

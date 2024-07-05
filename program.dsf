@@ -1,3 +1,15 @@
-move 100 %RPG0
-move 50 %RPG1
-add %RPG0 %RPG1
+a
+move 0 %RPG0
+move %RPG0 a
+move 1 %RPG0
+move 0 %RPG1
+move 1 %RPG2
+move 5 %RPG3
+laco:
+move &a %RPG1
+move %RPG0 a
+move %RPG1 %RPG0
+add a %RPG0
+sub %RPG2 %RPG3
+jneq %RPG2 %RPG3 laco
+-1
