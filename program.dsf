@@ -1,3 +1,12 @@
+soma ------------
+move 2 %RPG0
+move 40 %RPG1
+add %RPG0 %RPG1
+sub ------------
+move 40 %RPG0
+move 5 %RPG1
+sub %RPG0 %RPG1
+jneq laço que nao entra ----------------
 a
 move 0 %RPG0
 move %RPG0 a
@@ -11,4 +20,36 @@ move %RPG1 %RPG0
 add a %RPG0
 sub %RPG2 %RPG3
 jneq %RPG2 %RPG3 laco
+-1
+jlw laço inifinito -----------------
+a
+move 0 %RPG0
+move %RPG0 a
+move 1 %RPG0
+move 0 %RPG1
+move 1 %RPG2
+move 3 %RPG3
+laco:
+move &a %RPG1
+move %RPG0 a
+move %RPG1 %RPG0
+add a %RPG0
+sub %RPG3 %RPG2
+jlw %RPG2 %RPG3 laco
+-1
+jlw laço que funciona---------------
+a
+move 0 %RPG0
+move %RPG0 a
+move 1 %RPG0
+move 0 %RPG1
+move 1 %RPG2
+move 3 %RPG3
+laco:
+move &a %RPG1
+move %RPG0 a
+move %RPG1 %RPG0
+add a %RPG0
+sub %RPG3 %RPG2
+jlw %RPG1 %RPG0 laco
 -1
